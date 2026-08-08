@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elemental Blast Arena 2.0: Elemental Ascension</title>
+    <title>Blast Arena 2.0: Elemental Ascension</title>
     <style>
         body {
             margin: 0;
@@ -229,7 +229,7 @@
     <div id="overlay">
         <div class="money-display">💰 <span id="total-money">0</span> Money</div>
         <h1>ELEMENTAL BLAST ARENA 2.0</h1>
-        <p>Tactical Multiplayer Combat • Autosavege Enabled</p>
+        <p>Tactical Multiplayer Combat • Autosave Enabled</p>
         <div style="display: flex; gap: 10px;">
             <button onclick="showMapSelect()">MAP GALLERY</button>
             <button onclick="showWeaponSelect()">ELEMENTS</button>
@@ -249,6 +249,7 @@
                 <div class="perk-tier-title" style="color: #aaa;">Rookie (Starting Rank)</div>
                 <div class="perk-list">
                     <div class="perk-item">• Standard movement and weapon stats.</div>
+                    <div class="perk-item">• <strong>ALL PROJECTILES CAN BREAK INNER WALLS!</strong></div>
                     <div class="perk-item">• <strong>SPECIAL POWERS (ULTIMATES):</strong></div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#ff5722;">FIRE:</strong> Solar Flare (8-way Burst)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#03a9f4;">WATER:</strong> Mist Veil (Invulnerability Shield)</div>
@@ -269,7 +270,7 @@
                     <div class="perk-item"><strong style="color:#b2ebf2;">ICE:</strong> Bullets PIERCE enemies & Ult freeze duration is 6s.</div>
                     <div class="perk-item"><strong style="color:#4caf50;">PLANT:</strong> +40% Shooting Speed.</div>
                     <div class="perk-item"><strong style="color:#ffeb3b;">THUNDER:</strong> Volt Dash distance increased to 230px.</div>
-                    <div class="perk-item"><strong style="color:#8d6e63;">EARTH:</strong> Bouncing Boulders shatter destructible walls.</div>
+                    <div class="perk-item"><strong style="color:#8d6e63;">EARTH:</strong> Instant 1-hit wall destruction + splash blast wall shatter.</div>
                     <div class="perk-item"><strong style="color:#14b8a6;">WIND:</strong> Gust Bullets pass through all walls.</div>
                     <div class="perk-item"><strong style="color:#eab308;">LIGHT:</strong> Lasers move at double velocity.</div>
                 </div>
@@ -496,7 +497,7 @@
         // --- GAME CORE ---
         const TILE_SIZE = 30, ROWS = 21, COLS = 43, GAME_SPEED = 5, GAME_DURATION = 90;
         let isPlaying = false, keys = {}, loopId, timerInterval, timeLeft, logTimeout;
-        let bullets = [], enemies = [], walls = [], coins = [], p1, p2;
+        let bullets = [], enemies = [], walls = [], coins = [], particles = [], p1, p2;
 
         const MAP_MULTIPLIERS = [1, 1.2, 1.5, 2, 3, 5, 10, 100];
         const canvas = document.getElementById('gameCanvas');
@@ -647,36 +648,52 @@
             let w = [];
             for(let r=0; r<ROWS; r++) {
                 for(let c=0; c<COLS; c++) {
-                    if(r===0 || c===0 || r===ROWS-1 || c===COLS-1) { w.push({r,c,t:'b'}); continue; }
-                    if(c === Math.floor(COLS/2)) { w.push({r,c,t:'d'}); continue; }
+                    if(r===0 || c===0 || r===ROWS-1 || c===COLS-1) { w.push({r,c,t:'b', hp:Infinity}); continue; }
+                    if(c === Math.floor(COLS/2)) { w.push({r,c,t:'d', hp:2}); continue; }
                     if((c<5 && r<5) || (c>COLS-6 && r<5)) continue;
                     let rand = Math.random();
-                    if(window.selectedMapIdx === 1 && (r%2===0 && c%2===0 || rand<0.2)) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 2 && ((r>4 && r<ROWS-5) && (c===8 || c===COLS-9) || rand<0.1)) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 3 && rand<0.02) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 4 && (Math.hypot(c-COLS/4, r-ROWS/2)<3 || Math.hypot(c-3*COLS/4, r-ROWS/2)<3)) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 5 && (r%5===0 && c%4!==0)) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 6 && (Math.abs(c-COLS/2) < Math.abs(r-ROWS/2))) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 7 && (c%4===0 && r%4===0)) w.push({r,c,t:'w'});
-                    else if(window.selectedMapIdx === 0 && rand<0.15) w.push({r,c,t:'w'});
+                    if(window.selectedMapIdx === 1 && (r%2===0 && c%2===0 || rand<0.2)) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 2 && ((r>4 && r<ROWS-5) && (c===8 || c===COLS-9) || rand<0.1)) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 3 && rand<0.02) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 4 && (Math.hypot(c-COLS/4, r-ROWS/2)<3 || Math.hypot(c-3*COLS/4, r-ROWS/2)<3)) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 5 && (r%5===0 && c%4!==0)) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 6 && (Math.abs(c-COLS/2) < Math.abs(r-ROWS/2))) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 7 && (c%4===0 && r%4===0)) w.push({r,c,t:'w', hp:2});
+                    else if(window.selectedMapIdx === 0 && rand<0.15) w.push({r,c,t:'w', hp:2});
                 }
             }
             return w;
         }
 
-        function spawnCoin(walls, current) {
-            let v = false, r, c;
-            while(!v) { r = Math.floor(Math.random()*(ROWS-2))+1; c = Math.floor(Math.random()*(COLS-2))+1; if(!walls.some(w=>w.r===r&&w.c===c) && !current.some(x=>x.r===r&&x.c===c)) v = true; }
+        function spawnCoin(walls, current, specR, specC) {
+            let v = false, r = specR, c = specC;
+            if (r === undefined || c === undefined) {
+                while(!v) { 
+                    r = Math.floor(Math.random()*(ROWS-2))+1; 
+                    c = Math.floor(Math.random()*(COLS-2))+1; 
+                    if(!walls.some(w=>w.r===r&&w.c===c) && !current.some(x=>x.r===r&&x.c===c)) v = true; 
+                }
+            }
             const rand = Math.random()*100;
             let val, col, type;
             if (rand < 25) { val = 1; col = '#cd7f32'; type = 'bronze'; } else if (rand < 45) { val = 2; col = '#c0c0c0'; type = 'silver'; } else if (rand < 65) { val = 3; col = '#ffd700'; type = 'gold'; } else if (rand < 80) { val = 5; col = '#e0115f'; type = 'ruby'; } else if (rand < 92) { val = 8; col = '#0f52ba'; type = 'sapphire'; } else { val = 11; col = '#50c878'; type = 'emerald'; }
             return {r, c, val, col, type, animOffset: Math.random()*Math.PI};
         }
 
+        function createDebris(x, y, color) {
+            for(let i=0; i<6; i++) {
+                particles.push({
+                    x: x + TILE_SIZE/2, y: y + TILE_SIZE/2,
+                    vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6,
+                    size: Math.random()*4 + 2, life: 20, color: color || '#8d6e63'
+                });
+            }
+        }
+
         window.initGame = () => {
             p1 = new Player('#4da6ff', TILE_SIZE+5, TILE_SIZE+5, 'p1', window.p1Weapon);
             p2 = new Player('#ff4d4d', (COLS-2)*TILE_SIZE+5, TILE_SIZE+5, 'p2', window.p2Weapon);
-            walls = generateMap(); coins = []; bullets = []; enemies = [];
+            walls = generateMap(); coins = []; bullets = []; enemies = []; particles = [];
             for(let i=0; i<25; i++) coins.push(spawnCoin(walls, coins));
             for(let i=0; i<6; i++) enemies.push(new Enemy(walls));
             isPlaying = true; timeLeft = GAME_DURATION; document.getElementById('weapon-select').style.display = 'none';
@@ -703,10 +720,40 @@
                 
                 for(let j=walls.length-1; j>=0; j--) { 
                     let w = walls[j]; 
-                    if(b.x > w.c*TILE_SIZE && b.x < (w.c+1)*TILE_SIZE && b.y > w.r*TILE_SIZE && b.y < (w.r+1)*TILE_SIZE) { 
-                        if(w.t!=='b') {
-                            if (b.element === 'earth') walls.splice(j,1); 
+                    let wx = w.c * TILE_SIZE;
+                    let wy = w.r * TILE_SIZE;
+                    let r = b.size;
+                    
+                    // Box-sphere collision check
+                    if(b.x + r > wx && b.x - r < wx + TILE_SIZE && b.y + r > wy && b.y - r < wy + TILE_SIZE) { 
+                        if(w.t !== 'b') {
+                            let dmg = (b.element === 'earth' ? 2 : 1);
+                            w.hp -= dmg;
+                            createDebris(wx, wy, ELEMENT_COLORS[b.element]);
+                            
+                            // Evolved Earth Shockwave Shatter
+                            if (b.element === 'earth' && ((b.owner === 'p1' && p1.evolved) || (b.owner === 'p2' && p2.evolved))) {
+                                for (let k = walls.length - 1; k >= 0; k--) {
+                                    let neighbor = walls[k];
+                                    if (neighbor.t !== 'b' && Math.abs(neighbor.r - w.r) <= 1 && Math.abs(neighbor.c - w.c) <= 1) {
+                                        neighbor.hp = 0;
+                                    }
+                                }
+                            }
+
+                            // Clean up destroyed walls
+                            for (let k = walls.length - 1; k >= 0; k--) {
+                                if (walls[k].hp <= 0 && walls[k].t !== 'b') {
+                                    let destroyed = walls[k];
+                                    createDebris(destroyed.c * TILE_SIZE, destroyed.r * TILE_SIZE, '#8d6e63');
+                                    if (Math.random() < 0.35) {
+                                        coins.push(spawnCoin(walls, coins, destroyed.r, destroyed.c));
+                                    }
+                                    walls.splice(k, 1);
+                                }
+                            }
                         }
+                        
                         if (b.element !== 'wind') hitWall = true; 
                         break; 
                     } 
@@ -737,12 +784,55 @@
             if (p2d) p2d.innerText = `P2: ${p2.score}`; 
         }
 
+        function updateParticles() {
+            for(let i=particles.length-1; i>=0; i--) {
+                let p = particles[i];
+                p.x += p.vx; p.y += p.vy; p.life--;
+                if(p.life <= 0) particles.splice(i, 1);
+            }
+        }
+
         function draw() {
             ctx.fillStyle = '#050505'; ctx.fillRect(0,0,canvas.width,canvas.height);
-            walls.forEach(w => { ctx.fillStyle = w.t==='b'?'#222':(w.t==='d'?'#322':'#443'); ctx.fillRect(w.c*TILE_SIZE, w.r*TILE_SIZE, TILE_SIZE, TILE_SIZE); });
-            coins.forEach(c => { let t = Date.now()/200; let cx = c.c*TILE_SIZE+TILE_SIZE/2, cy = c.r*TILE_SIZE+TILE_SIZE/2+Math.sin(t+c.animOffset)*4; ctx.fillStyle = c.col; ctx.beginPath(); if (c.type === 'ruby' || c.type === 'sapphire') { ctx.moveTo(cx, cy-8); ctx.lineTo(cx+8, cy); ctx.lineTo(cx, cy+8); ctx.lineTo(cx-8, cy); } else if (c.type === 'emerald') { for(let i=0; i<6; i++) { let a = i*Math.PI/3; ctx.lineTo(cx+Math.cos(a)*9, cy+Math.sin(a)*9); } } else ctx.arc(cx, cy, 6, 0, Math.PI*2); ctx.fill(); });
+            
+            // Draw Walls
+            walls.forEach(w => { 
+                ctx.fillStyle = w.t==='b' ? '#222' : (w.t==='d' ? '#543' : '#443'); 
+                ctx.fillRect(w.c*TILE_SIZE, w.r*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                if (w.t !== 'b') {
+                    ctx.strokeStyle = '#2a221b';
+                    ctx.strokeRect(w.c*TILE_SIZE+2, w.r*TILE_SIZE+2, TILE_SIZE-4, TILE_SIZE-4);
+                    if (w.hp === 1) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+                        ctx.fillRect(w.c*TILE_SIZE+4, w.r*TILE_SIZE+4, TILE_SIZE-8, TILE_SIZE-8);
+                    }
+                }
+            });
+
+            // Particles
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+
+            // Draw Coins
+            coins.forEach(c => { 
+                let t = Date.now()/200; 
+                let cx = c.c*TILE_SIZE+TILE_SIZE/2, cy = c.r*TILE_SIZE+TILE_SIZE/2+Math.sin(t+c.animOffset)*4; 
+                ctx.fillStyle = c.col; ctx.beginPath(); 
+                if (c.type === 'ruby' || c.type === 'sapphire') { 
+                    ctx.moveTo(cx, cy-8); ctx.lineTo(cx+8, cy); ctx.lineTo(cx, cy+8); ctx.lineTo(cx-8, cy); 
+                } else if (c.type === 'emerald') { 
+                    for(let i=0; i<6; i++) { let a = i*Math.PI/3; ctx.lineTo(cx+Math.cos(a)*9, cy+Math.sin(a)*9); } 
+                } else ctx.arc(cx, cy, 6, 0, Math.PI*2); 
+                ctx.fill(); 
+            });
+
+            // Draw Enemies & Bullets
             enemies.forEach(e => { ctx.fillStyle = e.frozen > 0 ? '#00ffff' : '#9932CC'; ctx.fillRect(e.x, e.y, e.size, e.size); });
             bullets.forEach(b => { ctx.shadowBlur=10; ctx.shadowColor=b.color; ctx.fillStyle=b.color; ctx.beginPath(); ctx.arc(b.x, b.y, b.size, 0, Math.PI*2); ctx.fill(); ctx.shadowBlur=0; });
+            
+            // Draw Players
             [p1,p2].forEach(p => {
                 if(p.invuln>0 && Math.floor(Date.now()/100)%2===0) return;
                 if (p.ascended) { ctx.shadowBlur = 25; ctx.shadowColor = '#00ffff'; ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.strokeRect(p.x-4, p.y-4, p.size+8, p.size+8); ctx.shadowBlur = 0; }
@@ -768,7 +858,16 @@
             window.showMapSelect();
         }
 
-        function gameLoop() { if(!isPlaying) return; p1.update(walls); p2.update(walls); enemies.forEach(e => e.update(p1,p2,walls)); checkBullets(); checkInteractions(); draw(); loopId = requestAnimationFrame(gameLoop); }
+        function gameLoop() { 
+            if(!isPlaying) return; 
+            p1.update(walls); p2.update(walls); 
+            enemies.forEach(e => e.update(p1,p2,walls)); 
+            checkBullets(); 
+            checkInteractions(); 
+            updateParticles();
+            draw(); 
+            loopId = requestAnimationFrame(gameLoop); 
+        }
         
         window.onload = () => {
             loadProfileFromLocalStorage();
