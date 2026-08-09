@@ -238,13 +238,13 @@
         <div class="money-display">💰 <span id="total-money">0</span> Money</div>
         <h1>ELEMENTAL BLAST ARENA 2.0</h1>
         <p>Tactical Multiplayer Combat • Autosave Enabled</p>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="showMapSelect()">MAP GALLERY</button>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <button onclick="showMapSelect()">Map Gallery</button>
             <button onclick="showWeaponSelect()">ELEMENTS</button>
             <button onclick="showBenefits()" style="background: #4caf50; color: white;">BENEFITS</button>
             <button onclick="showVault()" style="background: gold; color: black;">Backup</button>
         </div>
-        <p style="font-size: 12px; color: #666; margin-top: 20px;">Buy elements and maps with money earned in battle! WASD+Space+F or Arrow Keys+Shift+Enter</p>
+        <p style="font-size: 12px; color: #666; margin-top: 20px;">Buy elements and maps with money earned in battle!</p>
     </div>
 
     <!-- Rank Benefits Modal -->
@@ -266,7 +266,7 @@
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#ffeb3b;">THUNDER:</strong> Volt Dash (Instant Teleport)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#8d6e63;">EARTH:</strong> Earthquake (Global Monster Stun)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#14b8a6;">WIND:</strong> Gale Repulsion (360° Knockback Blast)</div>
-                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield (Pass through walls + Invulnerability)</div>
+                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield (Phase through walls + Invulnerability + Bullets pass through walls)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#a855f7;">SHADOW:</strong> Void Domain (Blind enemies + Pierce walls)</div>
                 </div>
             </div>
@@ -348,13 +348,13 @@
         <div class="element-grid">
             <div class="item-card element-card" id="card-physical" onclick="selectWeapon('physical')"><h3 style="color: #aaaaaa;">Physical</h3><span id="price-physical" class="item-price">FREE</span></div>
             <div class="item-card element-card locked" id="card-fire" onclick="selectWeapon('fire')"><h3 style="color: #ff5722;">Fire</h3><span id="price-fire" class="item-price">40💰</span></div>
-            <div class="item-card element-card locked" id="card-water" onclick="selectWeapon('water')"><h3 style="color: #03a9f4;">Water</h3><span id="price-water" class="item-price">10💰</span></div>
-            <div class="item-card element-card locked" id="card-ice" onclick="selectWeapon('ice')"><h3 style="color: #b2ebf2;">Ice</h3><span id="price-ice" class="item-price">25💰</span></div>
+            <div class="item-card element-card locked" id="card-water" onclick="selectWeapon('water')"><h3 style="color: #03a9f4;">Water</h3><span id="price-water" class="item-price">25💰</span></div>
+            <div class="item-card element-card locked" id="card-ice" onclick="selectWeapon('ice')"><h3 style="color: #b2ebf2;">Ice</h3><span id="price-ice" class="item-price">100💰</span></div>
             <div class="item-card element-card locked" id="card-plant" onclick="selectWeapon('plant')"><h3 style="color: #4caf50;">Plant</h3><span id="price-plant" class="item-price">60💰</span></div>
             <div class="item-card element-card locked" id="card-thunder" onclick="selectWeapon('thunder')"><h3 style="color: #ffeb3b;">Thunder</h3><span id="price-thunder" class="item-price">15💰</span></div>
-            <div class="item-card element-card locked" id="card-earth" onclick="selectWeapon('earth')"><h3 style="color: #8d6e63;">Earth</h3><span id="price-earth" class="item-price">100💰</span></div>
+            <div class="item-card element-card locked" id="card-earth" onclick="selectWeapon('earth')"><h3 style="color: #8d6e63;">Earth</h3><span id="price-earth" class="item-price">75💰</span></div>
             <div class="item-card element-card locked" id="card-wind" onclick="selectWeapon('wind')"><h3 style="color: #14b8a6;">Wind</h3><span id="price-wind" class="item-price">250💰</span></div>
-            <div class="item-card element-card locked" id="card-light" onclick="selectWeapon('light')"><h3 style="color: #eab308;">Light</h3><span id="price-light" class="item-price">150💰</span></div>
+            <div class="item-card element-card locked" id="card-light" onclick="selectWeapon('light')"><h3 style="color: #eab308;">Light</h3><span id="price-light" class="item-price">300💰</span></div>
             <div class="item-card element-card locked" id="card-shadow" onclick="selectWeapon('shadow')"><h3 style="color: #a855f7;">Shadow</h3><span id="price-shadow" class="item-price">500💰</span></div>
         </div>
         <button id="start-btn" disabled onclick="initGame()" style="margin-top:20px;">COMMENCE BATTLE</button>
@@ -367,13 +367,13 @@
         // Element Configurations & Prices
         const ELEMENT_CONFIG = {
             physical: { name: 'Physical', cost: 0, color: '#aaaaaa' },
-            water:    { name: 'Water',    cost: 10, color: '#03a9f4' },
+            water:    { name: 'Water',    cost: 25, color: '#03a9f4' },
             thunder:  { name: 'Thunder',  cost: 15, color: '#ffeb3b' },
-            ice:      { name: 'Ice',      cost: 25, color: '#b2ebf2' },
+            earth:    { name: 'Earth',    cost: 75, color: '#8d6e63' },
+            ice:      { name: 'Ice',      cost: 100, color: '#b2ebf2' },
             fire:     { name: 'Fire',     cost: 40, color: '#ff5722' },
             plant:    { name: 'Plant',    cost: 60, color: '#4caf50' },
-            earth:    { name: 'Earth',    cost: 100, color: '#8d6e63' },
-            light:    { name: 'Light',    cost: 150, color: '#eab308' },
+            light:    { name: 'Light',    cost: 300, color: '#eab308' },
             wind:     { name: 'Wind',     cost: 250, color: '#14b8a6' },
             shadow:   { name: 'Shadow',   cost: 500, color: '#a855f7' }
         };
@@ -615,7 +615,7 @@
                 this.owner = owner; this.element = element;
                 this.size = element === 'water' ? (ip ? 15 : 9) : (element === 'earth' ? 10 : 6);
                 this.color = ELEMENT_COLORS[element] || '#ffffff'; this.active = true; 
-                this.isPierce = ip || element === 'wind' || element === 'shadow';
+                this.isPierce = ip || element === 'wind' || element === 'shadow' || element === 'light';
                 this.hitEnemies = new Set();
                 this.speed = (element === 'thunder' || element === 'light' ? 18 : (element === 'fire' || element === 'wind' ? 14 : 10)) * sm;
             }
@@ -661,7 +661,7 @@
                 this.evolved = false; this.ascended = false;
             }
             respawn() { this.x = this.startX; this.y = this.startY; this.invuln = 60; this.specialActive = 0; }
-            update(walls) {
+            update(walls, enemyList, coinList, opponent) {
                 let vx = 0, vy = 0, speed = GAME_SPEED;
                 if (this.evolved && (this.element === 'water' || this.element === 'physical')) speed += 1.5;
                 
@@ -712,7 +712,7 @@
             shoot() {
                 let cx = this.x + this.size/2, cy = this.y + this.size/2;
                 let sm = (this.evolved && (this.element === 'fire' || this.element === 'light' || this.element === 'physical')) ? 1.4 : 1;
-                let ip = (this.evolved && this.element === 'ice') || this.element === 'wind' || this.element === 'shadow';
+                let ip = (this.evolved && this.element === 'ice') || this.element === 'wind' || this.element === 'shadow' || this.element === 'light';
                 
                 if (this.specialActive > 0 && this.element === 'plant') {
                     for(let a of [0, -0.3, 0.3]) bullets.push(new Bullet(cx, cy, Math.cos(Math.atan2(this.lastDirY, this.lastDirX)+a), Math.sin(Math.atan2(this.lastDirY, this.lastDirX)+a), this.type, this.element, sm, ip));
@@ -892,7 +892,7 @@
                             }
                         }
                         
-                        if (b.element !== 'wind' && b.element !== 'shadow') hitWall = true; 
+                        if (b.element !== 'wind' && b.element !== 'shadow' && b.element !== 'light') hitWall = true; 
                         break; 
                     } 
                 }
@@ -1004,7 +1004,8 @@
 
         function gameLoop() { 
             if(!isPlaying) return; 
-            p1.update(walls); p2.update(walls); 
+            p1.update(walls, enemies, coins, p2); 
+            p2.update(walls, enemies, coins, p1); 
             enemies.forEach(e => e.update(p1,p2,walls)); 
             checkBullets(); 
             checkInteractions(); 
