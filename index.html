@@ -72,10 +72,10 @@
 
         .element-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 12px;
             margin-top: 20px;
-            max-width: 720px;
+            max-width: 850px;
         }
 
         .item-card {
@@ -86,16 +86,24 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            width: 140px;
+            width: 145px;
             box-sizing: border-box;
         }
 
         .item-card:hover { border-color: #777; transform: translateY(-3px); }
         .item-card.selected { border-color: #ffd700; background: rgba(255, 215, 0, 0.1); }
-        .item-card.locked { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
+        .item-card.locked { opacity: 0.6; filter: grayscale(0.8); }
 
         .element-card.selected-p1 { border-color: #4da6ff; background: rgba(77, 166, 255, 0.15); box-shadow: 0 0 15px rgba(77, 166, 255, 0.3); }
         .element-card.selected-p2 { border-color: #ff4d4d; background: rgba(255, 77, 77, 0.15); box-shadow: 0 0 15px rgba(255, 77, 77, 0.3); }
+
+        .item-price {
+            font-size: 11px;
+            color: gold;
+            font-weight: bold;
+            margin-top: 4px;
+            display: block;
+        }
 
         .money-display {
             position: absolute;
@@ -236,7 +244,7 @@
             <button onclick="showBenefits()" style="background: #4caf50; color: white;">BENEFITS</button>
             <button onclick="showVault()" style="background: gold; color: black;">Backup</button>
         </div>
-        <p style="font-size: 12px; color: #666; margin-top: 20px;">Earn Money Faster on Elite Maps!</p>
+        <p style="font-size: 12px; color: #666; margin-top: 20px;">Buy elements and maps with money earned in battle! WASD+Space+F or Arrow Keys+Shift+Enter</p>
     </div>
 
     <!-- Rank Benefits Modal -->
@@ -249,8 +257,8 @@
                 <div class="perk-tier-title" style="color: #aaa;">Rookie (Starting Rank)</div>
                 <div class="perk-list">
                     <div class="perk-item">• Standard movement and weapon stats.</div>
-                    <div class="perk-item">• <strong>ALL PROJECTILES CAN BREAK INNER WALLS!</strong></div>
                     <div class="perk-item">• <strong>SPECIAL POWERS (ULTIMATES):</strong></div>
+                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#aaaaaa;">PHYSICAL:</strong> Standard Cannon (No special ability)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#ff5722;">FIRE:</strong> Solar Flare (8-way Burst)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#03a9f4;">WATER:</strong> Mist Veil (Invulnerability Shield)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#b2ebf2;">ICE:</strong> Zero Degree (Freeze all Monsters)</div>
@@ -258,13 +266,15 @@
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#ffeb3b;">THUNDER:</strong> Volt Dash (Instant Teleport)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#8d6e63;">EARTH:</strong> Earthquake (Global Monster Stun)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#14b8a6;">WIND:</strong> Gale Repulsion (360° Knockback Blast)</div>
-                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield (Shield & +15 Score Bonus)</div>
+                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield (Pass through walls + Invulnerability)</div>
+                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#a855f7;">SHADOW:</strong> Void Domain (Blind enemies + Pierce walls)</div>
                 </div>
             </div>
 
             <div class="perk-section">
                 <div class="perk-tier-title">Evolved (50+ Match Score)</div>
                 <div class="perk-list">
+                    <div class="perk-item"><strong style="color:#aaaaaa;">PHYSICAL:</strong> +20% Move Speed & +25% Bullet Velocity.</div>
                     <div class="perk-item"><strong style="color:#ff5722;">FIRE:</strong> +40% Bullet Speed & +30% Fire Rate.</div>
                     <div class="perk-item"><strong style="color:#03a9f4;">WATER:</strong> +1.5 Permanent Movement Speed.</div>
                     <div class="perk-item"><strong style="color:#b2ebf2;">ICE:</strong> Bullets PIERCE enemies & Ult freeze duration is 6s.</div>
@@ -272,7 +282,8 @@
                     <div class="perk-item"><strong style="color:#ffeb3b;">THUNDER:</strong> Volt Dash distance increased to 230px.</div>
                     <div class="perk-item"><strong style="color:#8d6e63;">EARTH:</strong> Instant 1-hit wall destruction + splash blast wall shatter.</div>
                     <div class="perk-item"><strong style="color:#14b8a6;">WIND:</strong> Gust Bullets pass through all walls.</div>
-                    <div class="perk-item"><strong style="color:#eab308;">LIGHT:</strong> Lasers move at double velocity.</div>
+                    <div class="perk-item"><strong style="color:#eab308;">LIGHT:</strong> Light ability lets you phase through walls easily.</div>
+                    <div class="perk-item"><strong style="color:#a855f7;">SHADOW:</strong> Void Domain lasts 6s & grants double score.</div>
                 </div>
             </div>
 
@@ -280,7 +291,7 @@
                 <div class="perk-tier-title" style="color: #00ffff;">Ascended (375+ Match Score)</div>
                 <div class="perk-list">
                     • <strong style="color:#00ffff;">INFINITE POWER:</strong> All Ultimates have ZERO cooldown.<br>
-                    • Use Solar Flare, Zero Degree, Gale Repulsion, or Divine Shield repeatedly.<br>
+                    • Use Solar Flare, Zero Degree, Divine Shield, or Void Domain repeatedly.<br>
                     • Visual: Cyan Aura & Glowing Crown.
                 </div>
             </div>
@@ -307,7 +318,7 @@
             </div>
 
             <div id="vault-result" style="display: none;">
-                <p style="font-size: 11px; color: gold;">Copy this code to transfer your balance and maps:</p>
+                <p style="font-size: 11px; color: gold;">Copy this code to transfer your balance, elements, and maps:</p>
                 <div id="v-output" class="code-output"></div>
             </div>
 
@@ -319,7 +330,7 @@
     <div id="map-select">
         <h2 id="map-gallery-title">SELECT BATTLEGROUND</h2>
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px;">
-            <div class="item-card" id="map-0" onclick="selectMap(0)"><h3>Standard</h3><span class="map-multiplier">x1 Money</span></div>
+            <div class="item-card" id="map-0" onclick="selectMap(0)"><h3>Standard</h3><p>FREE</p><span class="map-multiplier">x1 Money</span></div>
             <div class="item-card locked" id="map-1" onclick="selectMap(1)"><h3>Labyrinth</h3><p>5💰</p><span class="map-multiplier">x1.2 Money</span></div>
             <div class="item-card locked" id="map-2" onclick="selectMap(2)"><h3>Fortress</h3><p>25💰</p><span class="map-multiplier">x1.5 Money</span></div>
             <div class="item-card locked" id="map-3" onclick="selectMap(3)"><h3>The Void</h3><p>125💰</p><span class="map-multiplier">x2 Money</span></div>
@@ -331,18 +342,20 @@
         <button id="map-back-btn" onclick="hideMapSelect()" style="margin-top: 20px;">BACK TO MENU</button>
     </div>
 
-    <!-- Element Selection (8 Elements) -->
+    <!-- Element Selection (10 Elements) -->
     <div id="weapon-select">
         <h2 id="select-title">P1: CHOOSE YOUR ELEMENT</h2>
         <div class="element-grid">
-            <div class="item-card element-card" id="card-fire" onclick="selectWeapon('fire')"><h3 style="color: #ff5722;">Fire</h3></div>
-            <div class="item-card element-card" id="card-water" onclick="selectWeapon('water')"><h3 style="color: #03a9f4;">Water</h3></div>
-            <div class="item-card element-card" id="card-ice" onclick="selectWeapon('ice')"><h3 style="color: #b2ebf2;">Ice</h3></div>
-            <div class="item-card element-card" id="card-plant" onclick="selectWeapon('plant')"><h3 style="color: #4caf50;">Plant</h3></div>
-            <div class="item-card element-card" id="card-thunder" onclick="selectWeapon('thunder')"><h3 style="color: #ffeb3b;">Thunder</h3></div>
-            <div class="item-card element-card" id="card-earth" onclick="selectWeapon('earth')"><h3 style="color: #8d6e63;">Earth</h3></div>
-            <div class="item-card element-card" id="card-wind" onclick="selectWeapon('wind')"><h3 style="color: #14b8a6;">Wind</h3></div>
-            <div class="item-card element-card" id="card-light" onclick="selectWeapon('light')"><h3 style="color: #eab308;">Light</h3></div>
+            <div class="item-card element-card" id="card-physical" onclick="selectWeapon('physical')"><h3 style="color: #aaaaaa;">Physical</h3><span id="price-physical" class="item-price">FREE</span></div>
+            <div class="item-card element-card locked" id="card-fire" onclick="selectWeapon('fire')"><h3 style="color: #ff5722;">Fire</h3><span id="price-fire" class="item-price">40💰</span></div>
+            <div class="item-card element-card locked" id="card-water" onclick="selectWeapon('water')"><h3 style="color: #03a9f4;">Water</h3><span id="price-water" class="item-price">10💰</span></div>
+            <div class="item-card element-card locked" id="card-ice" onclick="selectWeapon('ice')"><h3 style="color: #b2ebf2;">Ice</h3><span id="price-ice" class="item-price">25💰</span></div>
+            <div class="item-card element-card locked" id="card-plant" onclick="selectWeapon('plant')"><h3 style="color: #4caf50;">Plant</h3><span id="price-plant" class="item-price">60💰</span></div>
+            <div class="item-card element-card locked" id="card-thunder" onclick="selectWeapon('thunder')"><h3 style="color: #ffeb3b;">Thunder</h3><span id="price-thunder" class="item-price">15💰</span></div>
+            <div class="item-card element-card locked" id="card-earth" onclick="selectWeapon('earth')"><h3 style="color: #8d6e63;">Earth</h3><span id="price-earth" class="item-price">100💰</span></div>
+            <div class="item-card element-card locked" id="card-wind" onclick="selectWeapon('wind')"><h3 style="color: #14b8a6;">Wind</h3><span id="price-wind" class="item-price">250💰</span></div>
+            <div class="item-card element-card locked" id="card-light" onclick="selectWeapon('light')"><h3 style="color: #eab308;">Light</h3><span id="price-light" class="item-price">150💰</span></div>
+            <div class="item-card element-card locked" id="card-shadow" onclick="selectWeapon('shadow')"><h3 style="color: #a855f7;">Shadow</h3><span id="price-shadow" class="item-price">500💰</span></div>
         </div>
         <button id="start-btn" disabled onclick="initGame()" style="margin-top:20px;">COMMENCE BATTLE</button>
     </div>
@@ -351,8 +364,28 @@
         // LocalStorage Key
         const STORAGE_KEY = 'blast_arena_save_v2';
 
+        // Element Configurations & Prices
+        const ELEMENT_CONFIG = {
+            physical: { name: 'Physical', cost: 0, color: '#aaaaaa' },
+            water:    { name: 'Water',    cost: 10, color: '#03a9f4' },
+            thunder:  { name: 'Thunder',  cost: 15, color: '#ffeb3b' },
+            ice:      { name: 'Ice',      cost: 25, color: '#b2ebf2' },
+            fire:     { name: 'Fire',     cost: 40, color: '#ff5722' },
+            plant:    { name: 'Plant',    cost: 60, color: '#4caf50' },
+            earth:    { name: 'Earth',    cost: 100, color: '#8d6e63' },
+            light:    { name: 'Light',    cost: 150, color: '#eab308' },
+            wind:     { name: 'Wind',     cost: 250, color: '#14b8a6' },
+            shadow:   { name: 'Shadow',   cost: 500, color: '#a855f7' }
+        };
+
+        const MAP_COSTS = [0, 5, 25, 125, 1000, 1500, 3750, 1000000];
+
         // State Profile
-        let profile = { money: 0, maps: [true, false, false, false, false, false, false, false] };
+        let profile = { 
+            money: 0, 
+            maps: [true, false, false, false, false, false, false, false],
+            elements: { physical: true, fire: false, water: false, ice: false, plant: false, thunder: false, earth: false, wind: false, light: false, shadow: false }
+        };
 
         function loadProfileFromLocalStorage() {
             try {
@@ -361,6 +394,7 @@
                     const data = JSON.parse(raw);
                     if (typeof data.money === 'number') profile.money = data.money;
                     if (Array.isArray(data.maps)) profile.maps = data.maps;
+                    if (data.elements) profile.elements = { ...profile.elements, ...data.elements };
                 }
             } catch(e) {
                 console.warn("Failed to load local storage data:", e);
@@ -377,9 +411,13 @@
         }
 
         function resetLocalStorageData() {
-            if (confirm("Are you sure you want to reset all money and unlocked maps?")) {
+            if (confirm("Are you sure you want to reset all money, elements, and unlocked maps?")) {
                 localStorage.removeItem(STORAGE_KEY);
-                profile = { money: 0, maps: [true, false, false, false, false, false, false, false] };
+                profile = { 
+                    money: 0, 
+                    maps: [true, false, false, false, false, false, false, false],
+                    elements: { physical: true, fire: false, water: false, ice: false, plant: false, thunder: false, earth: false, wind: false, light: false, shadow: false }
+                };
                 updateMenuUI();
                 hideVault();
                 showLog("PROGRESS RESET");
@@ -401,7 +439,7 @@
             window.p2Weapon = null; 
             document.getElementById('select-title').innerText = "P1: CHOOSE YOUR ELEMENT";
             document.getElementById('start-btn').disabled = true;
-            document.querySelectorAll('.element-card').forEach(c => c.classList.remove('selected-p1', 'selected-p2'));
+            updateWeaponCards();
         };
 
         window.showMapSelect = () => { 
@@ -419,20 +457,72 @@
             document.getElementById('map-gallery-title').style.color = "white";
         };
         
-        window.selectMap = (idx) => { if (!profile.maps[idx]) return; window.selectedMapIdx = idx; document.querySelectorAll('#map-select .item-card').forEach(c => c.classList.remove('selected')); document.getElementById(`map-${idx}`).classList.add('selected'); };
+        window.selectMap = (idx) => { 
+            if (!profile.maps[idx]) {
+                const cost = MAP_COSTS[idx];
+                if (profile.money >= cost) {
+                    profile.money -= cost;
+                    profile.maps[idx] = true;
+                    saveProfileToLocalStorage();
+                    updateMenuUI();
+                    showLog(`MAP UNLOCKED (-${cost}💰)`);
+                } else {
+                    showLog(`NOT ENOUGH MONEY (${cost}💰 NEEDED)`);
+                    return;
+                }
+            } 
+            window.selectedMapIdx = idx; 
+            document.querySelectorAll('#map-select .item-card').forEach(c => c.classList.remove('selected')); 
+            document.getElementById(`map-${idx}`).classList.add('selected'); 
+        };
         
         window.selectWeapon = (type) => { 
+            const cfg = ELEMENT_CONFIG[type];
+            if (!profile.elements[type]) {
+                if (profile.money >= cfg.cost) {
+                    profile.money -= cfg.cost;
+                    profile.elements[type] = true;
+                    saveProfileToLocalStorage();
+                    updateMenuUI();
+                    updateWeaponCards();
+                    showLog(`${cfg.name.toUpperCase()} UNLOCKED (-${cfg.cost}💰)`);
+                } else {
+                    showLog(`NOT ENOUGH MONEY (${cfg.cost}💰 NEEDED)`);
+                    return;
+                }
+            }
+
             if (window.currentSelectingPlayer === 1) { 
-                window.p1Weapon = type; window.currentSelectingPlayer = 2; document.getElementById('select-title').innerText = "P2: CHOOSE YOUR ELEMENT"; 
+                window.p1Weapon = type; 
+                window.currentSelectingPlayer = 2; 
+                document.getElementById('select-title').innerText = "P2: CHOOSE YOUR ELEMENT"; 
             } else { 
-                window.p2Weapon = type; document.getElementById('start-btn').disabled = false; document.getElementById('select-title').innerText = "BOTH ELEMENTS SELECTED";
+                window.p2Weapon = type; 
+                document.getElementById('start-btn').disabled = false; 
+                document.getElementById('select-title').innerText = "BOTH ELEMENTS SELECTED";
             } 
-            document.querySelectorAll('.element-card').forEach(c => { 
-                c.classList.remove('selected-p1', 'selected-p2'); 
-                if (window.p1Weapon === c.id.replace('card-','')) c.classList.add('selected-p1'); 
-                if (window.p2Weapon === c.id.replace('card-','')) c.classList.add('selected-p2'); 
-            }); 
+            updateWeaponCards();
         };
+
+        function updateWeaponCards() {
+            Object.keys(ELEMENT_CONFIG).forEach(key => {
+                const card = document.getElementById(`card-${key}`);
+                const priceTag = document.getElementById(`price-${key}`);
+                if (!card) return;
+                
+                card.classList.remove('selected-p1', 'selected-p2');
+                if (window.p1Weapon === key) card.classList.add('selected-p1');
+                if (window.p2Weapon === key) card.classList.add('selected-p2');
+
+                if (profile.elements[key]) {
+                    card.classList.remove('locked');
+                    if (priceTag) priceTag.innerText = "OWNED";
+                } else {
+                    card.classList.add('locked');
+                    if (priceTag) priceTag.innerText = `${ELEMENT_CONFIG[key].cost}💰`;
+                }
+            });
+        }
 
         window.showVault = () => { keys = {}; document.getElementById('vault-overlay').style.display = 'flex'; resetVaultUI(); };
         window.hideVault = () => { keys = {}; document.getElementById('vault-overlay').style.display = 'none'; };
@@ -447,19 +537,18 @@
         function updateMenuUI() {
             const moneyDisplay = document.getElementById('total-money');
             if (moneyDisplay) moneyDisplay.innerText = Math.floor(profile.money);
-            
-            if (profile.money >= 5) profile.maps[1] = true;
-            if (profile.money >= 25) profile.maps[2] = true;
-            if (profile.money >= 125) profile.maps[3] = true;
-            if (profile.money >= 1000) profile.maps[4] = true;
-            if (profile.money >= 1500) profile.maps[5] = true;
-            if (profile.money >= 3750) profile.maps[6] = true;
-            if (profile.money >= 1000000) profile.maps[7] = true;
 
             profile.maps.forEach((unlocked, i) => {
                 const card = document.getElementById(`map-${i}`);
-                if (card) unlocked ? card.classList.remove('locked') : card.classList.add('locked');
+                if (card) {
+                    if (unlocked) {
+                        card.classList.remove('locked');
+                    } else {
+                        card.classList.add('locked');
+                    }
+                }
             });
+            updateWeaponCards();
             saveProfileToLocalStorage();
         }
 
@@ -508,14 +597,16 @@
         canvas.width = COLS * TILE_SIZE; canvas.height = ROWS * TILE_SIZE;
 
         const ELEMENT_COLORS = { 
-            fire: '#ff5722', 
-            water: '#03a9f4', 
-            ice: '#b2ebf2', 
-            plant: '#4caf50', 
-            thunder: '#ffeb3b',
-            earth: '#8d6e63',
-            wind: '#14b8a6',
-            light: '#eab308'
+            physical: '#aaaaaa',
+            fire:     '#ff5722', 
+            water:    '#03a9f4', 
+            ice:      '#b2ebf2', 
+            plant:    '#4caf50', 
+            thunder:  '#ffeb3b',
+            earth:    '#8d6e63',
+            wind:     '#14b8a6',
+            light:    '#eab308',
+            shadow:   '#a855f7'
         };
 
         class Bullet {
@@ -523,7 +614,8 @@
                 this.x = x; this.y = y; this.dx = dx; this.dy = dy;
                 this.owner = owner; this.element = element;
                 this.size = element === 'water' ? (ip ? 15 : 9) : (element === 'earth' ? 10 : 6);
-                this.color = ELEMENT_COLORS[element]; this.active = true; this.isPierce = ip || element === 'wind';
+                this.color = ELEMENT_COLORS[element] || '#ffffff'; this.active = true; 
+                this.isPierce = ip || element === 'wind' || element === 'shadow';
                 this.hitEnemies = new Set();
                 this.speed = (element === 'thunder' || element === 'light' ? 18 : (element === 'fire' || element === 'wind' ? 14 : 10)) * sm;
             }
@@ -571,7 +663,8 @@
             respawn() { this.x = this.startX; this.y = this.startY; this.invuln = 60; this.specialActive = 0; }
             update(walls) {
                 let vx = 0, vy = 0, speed = GAME_SPEED;
-                if (this.evolved && this.element === 'water') speed += 1.5;
+                if (this.evolved && (this.element === 'water' || this.element === 'physical')) speed += 1.5;
+                
                 if (this.type === 'p1') {
                     if (keys['w'] || keys['W'] || keys['KeyW']) { vy = -speed; this.lastDirX=0; this.lastDirY=-1; } 
                     else if (keys['s'] || keys['S'] || keys['KeyS']) { vy = speed; this.lastDirX=0; this.lastDirY=1; } 
@@ -589,12 +682,19 @@
                     if (keys['Enter'] && this.shootCD <= 0) this.shoot(); 
                     if ((keys['Shift'] || keys['ShiftLeft'] || keys['ShiftRight']) && this.specialCD <= 0) this.useSpecial();
                 }
+                
                 if (this.shootCD > 0) this.shootCD--; if (this.invuln > 0) this.invuln--;
                 if (this.ascended) this.specialCD = 0; else if (this.specialCD > 0) this.specialCD--;
                 if (this.specialActive > 0) this.specialActive--;
-                if (!this.checkCollision(this.x + vx, this.y, walls)) this.x += vx;
-                if (!this.checkCollision(this.x, this.y + vy, walls)) this.y += vy;
-                this.x = Math.max(0, Math.min(this.x, canvas.width - this.size)); this.y = Math.max(0, Math.min(this.y, canvas.height - this.size));
+                
+                // LIGHT Element Ability Wall Phasing: Pass through destructible inner walls cleanly!
+                const canPhaseWalls = (this.element === 'light' && this.specialActive > 0);
+
+                if (canPhaseWalls || !this.checkCollision(this.x + vx, this.y, walls)) this.x += vx;
+                if (canPhaseWalls || !this.checkCollision(this.x, this.y + vy, walls)) this.y += vy;
+                
+                this.x = Math.max(0, Math.min(this.x, canvas.width - this.size)); 
+                this.y = Math.max(0, Math.min(this.y, canvas.height - this.size));
                 
                 const fill = document.getElementById(`${this.type}-cd-fill`);
                 if (fill) fill.style.width = `${this.specialCD <= 0 ? 100 : (1 - this.specialCD / 500) * 100}%`;
@@ -611,8 +711,8 @@
             }
             shoot() {
                 let cx = this.x + this.size/2, cy = this.y + this.size/2;
-                let sm = this.evolved && (this.element === 'fire' || this.element === 'light') ? 1.4 : 1;
-                let ip = (this.evolved && this.element === 'ice') || this.element === 'wind';
+                let sm = (this.evolved && (this.element === 'fire' || this.element === 'light' || this.element === 'physical')) ? 1.4 : 1;
+                let ip = (this.evolved && this.element === 'ice') || this.element === 'wind' || this.element === 'shadow';
                 
                 if (this.specialActive > 0 && this.element === 'plant') {
                     for(let a of [0, -0.3, 0.3]) bullets.push(new Bullet(cx, cy, Math.cos(Math.atan2(this.lastDirY, this.lastDirX)+a), Math.sin(Math.atan2(this.lastDirY, this.lastDirX)+a), this.type, this.element, sm, ip));
@@ -622,6 +722,10 @@
                 this.shootCD = this.element === 'plant' ? (this.evolved?7:12) : (this.evolved?15:22);
             }
             useSpecial() {
+                if (this.element === 'physical') {
+                    showLog("PHYSICAL HAS NO ABILITY");
+                    return; // Base element has no special ability
+                }
                 if (!this.ascended) this.specialCD = 500;
                 this.specialActive = 180;
                 let cx = this.x+this.size/2, cy = this.y+this.size/2;
@@ -635,14 +739,24 @@
                 } else if (this.element === 'wind') {
                     for(let i=0; i<12; i++) bullets.push(new Bullet(cx, cy, Math.cos(i*Math.PI/6), Math.sin(i*Math.PI/6), this.type, 'wind', 1.8, true));
                 } else if (this.element === 'light') {
-                    this.invuln = 120;
+                    this.invuln = 180;
                     this.score += 15;
+                    updateScore();
+                } else if (this.element === 'shadow') {
+                    this.invuln = 120;
+                    enemies.forEach(e => e.frozen = 180);
+                    this.score += 25;
                     updateScore();
                 }
             }
             checkCollision(nx, ny, walls) {
                 let rect = {x: nx, y: ny, w: this.size, h: this.size};
-                return walls.some(w => { let wx = w.c*TILE_SIZE, wy = w.r*TILE_SIZE; return rect.x < wx+TILE_SIZE && rect.x+rect.w > wx && rect.y < wy+TILE_SIZE && rect.y+rect.h > wy; });
+                return walls.some(w => { 
+                    // Ignore destructible walls during Light Wall Phasing
+                    if (this.element === 'light' && this.specialActive > 0 && w.t !== 'b') return false;
+                    let wx = w.c*TILE_SIZE, wy = w.r*TILE_SIZE; 
+                    return rect.x < wx+TILE_SIZE && rect.x+rect.w > wx && rect.y < wy+TILE_SIZE && rect.y+rect.h > wy; 
+                });
             }
         }
 
@@ -715,8 +829,8 @@
 
         window.initGame = () => {
             keys = {};
-            p1 = new Player('#4da6ff', TILE_SIZE+5, TILE_SIZE+5, 'p1', window.p1Weapon);
-            p2 = new Player('#ff4d4d', (COLS-2)*TILE_SIZE+5, TILE_SIZE+5, 'p2', window.p2Weapon);
+            p1 = new Player('#4da6ff', TILE_SIZE+5, TILE_SIZE+5, 'p1', window.p1Weapon || 'physical');
+            p2 = new Player('#ff4d4d', (COLS-2)*TILE_SIZE+5, TILE_SIZE+5, 'p2', window.p2Weapon || 'physical');
             walls = generateMap(); coins = []; bullets = []; enemies = []; particles = [];
             for(let i=0; i<25; i++) coins.push(spawnCoin(walls, coins));
             for(let i=0; i<6; i++) enemies.push(new Enemy(walls));
@@ -733,7 +847,7 @@
         function checkInteractions() {
             [p1,p2].forEach(p => {
                 for(let i=coins.length-1; i>=0; i--) { let c = coins[i]; if(Math.hypot(p.x+p.size/2 - (c.c*TILE_SIZE+TILE_SIZE/2), p.y+p.size/2 - (c.r*TILE_SIZE+TILE_SIZE/2)) < TILE_SIZE) { p.score+=c.val; coins.splice(i,1); coins.push(spawnCoin(walls, coins)); updateScore(); } }
-                if(p.invuln<=0 && !((p.element==='water'||p.element==='light')&&p.specialActive>0)) enemies.forEach(e => { if(p.x < e.x+e.size && p.x+p.size > e.x && p.y < e.y+e.size && p.y+p.size > e.y) { p.score = Math.max(0, p.score-5); p.respawn(); updateScore(); } });
+                if(p.invuln<=0 && !((p.element==='water'||p.element==='light'||p.element==='shadow')&&p.specialActive>0)) enemies.forEach(e => { if(p.x < e.x+e.size && p.x+p.size > e.x && p.y < e.y+e.size && p.y+p.size > e.y) { p.score = Math.max(0, p.score-5); p.respawn(); updateScore(); } });
             });
         }
 
@@ -778,7 +892,7 @@
                             }
                         }
                         
-                        if (b.element !== 'wind') hitWall = true; 
+                        if (b.element !== 'wind' && b.element !== 'shadow') hitWall = true; 
                         break; 
                     } 
                 }
@@ -786,7 +900,7 @@
                 if(hitWall) { bullets.splice(i,1); continue; }
                 let target = b.owner==='p1'?p2:p1;
                 
-                if(target.invuln<=0 && !((target.element==='water'||target.element==='light')&&target.specialActive>0) && b.x>target.x && b.x<target.x+target.size && b.y>target.y && b.y<target.y+target.size) { 
+                if(target.invuln<=0 && !((target.element==='water'||target.element==='light'||target.element==='shadow')&&target.specialActive>0) && b.x>target.x && b.x<target.x+target.size && b.y>target.y && b.y<target.y+target.size) { 
                     (b.owner==='p1'?p1:p2).score += 25; 
                     target.score = Math.max(0, target.score-10); 
                     target.respawn(); updateScore(); bullets.splice(i,1); continue; 
@@ -860,9 +974,15 @@
             [p1,p2].forEach(p => {
                 if(p.invuln>0 && Math.floor(Date.now()/100)%2===0) return;
                 if (p.ascended) { ctx.shadowBlur = 25; ctx.shadowColor = '#00ffff'; ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.strokeRect(p.x-4, p.y-4, p.size+8, p.size+8); ctx.shadowBlur = 0; }
-                else if (p.evolved) { ctx.shadowBlur = 15; ctx.shadowColor = ELEMENT_COLORS[p.element]; ctx.strokeStyle = 'gold'; ctx.lineWidth = 2; ctx.strokeRect(p.x-3, p.y-3, p.size+6, p.size+6); ctx.shadowBlur = 0; }
-                if((p.element==='water'||p.element==='light')&&p.specialActive>0) { ctx.strokeStyle=ELEMENT_COLORS[p.element]; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(p.x+p.size/2, p.y+p.size/2, p.size, 0, Math.PI*2); ctx.stroke(); }
-                ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); ctx.fillStyle = ELEMENT_COLORS[p.element]; ctx.save(); ctx.translate(p.x+p.size/2, p.y+p.size/2); ctx.rotate(Math.atan2(p.lastDirY, p.lastDirX)); ctx.fillRect(0, -3, 16, 6); ctx.restore();
+                else if (p.evolved) { ctx.shadowBlur = 15; ctx.shadowColor = ELEMENT_COLORS[p.element] || '#fff'; ctx.strokeStyle = 'gold'; ctx.lineWidth = 2; ctx.strokeRect(p.x-3, p.y-3, p.size+6, p.size+6); ctx.shadowBlur = 0; }
+                
+                if((p.element==='water'||p.element==='light'||p.element==='shadow')&&p.specialActive>0) { 
+                    ctx.strokeStyle=ELEMENT_COLORS[p.element]; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(p.x+p.size/2, p.y+p.size/2, p.size, 0, Math.PI*2); ctx.stroke(); 
+                }
+                
+                ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); 
+                ctx.fillStyle = ELEMENT_COLORS[p.element] || '#ffffff'; 
+                ctx.save(); ctx.translate(p.x+p.size/2, p.y+p.size/2); ctx.rotate(Math.atan2(p.lastDirY, p.lastDirX)); ctx.fillRect(0, -3, 16, 6); ctx.restore();
             });
         }
 
