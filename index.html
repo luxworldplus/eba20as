@@ -266,7 +266,7 @@
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#ffeb3b;">THUNDER:</strong> Volt Dash (Instant Teleport)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#8d6e63;">EARTH:</strong> Earthquake (Global Monster Stun)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#14b8a6;">WIND:</strong> Gale Repulsion (360° Knockback Blast)</div>
-                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield (Phase through walls + Invulnerability + Bullets pass through walls)</div>
+                    <div class="perk-item" style="padding-left: 10px;"><strong style="color:#eab308;">LIGHT:</strong> Divine Shield + High Speed & Wall Phasing (Phase through walls + Invulnerability)</div>
                     <div class="perk-item" style="padding-left: 10px;"><strong style="color:#a855f7;">SHADOW:</strong> Void Domain (Blind enemies + Pierce walls)</div>
                 </div>
             </div>
@@ -617,7 +617,7 @@
                 this.color = ELEMENT_COLORS[element] || '#ffffff'; this.active = true; 
                 this.isPierce = ip || element === 'wind' || element === 'shadow' || element === 'light';
                 this.hitEnemies = new Set();
-                this.speed = (element === 'thunder' || element === 'light' ? 18 : (element === 'fire' || element === 'wind' ? 14 : 10)) * sm;
+                this.speed = (element === 'light' ? 18 : (element === 'shadow' ? 16 : (element === 'thunder' ? 18 : (element === 'fire' || element === 'wind' ? 14 : 10)))) * sm;
             }
             update() { 
                 this.x += this.dx * this.speed; 
@@ -662,7 +662,7 @@
             }
             respawn() { this.x = this.startX; this.y = this.startY; this.invuln = 60; this.specialActive = 0; }
             update(walls, enemyList, coinList, opponent) {
-                let vx = 0, vy = 0, speed = GAME_SPEED;
+                let vx = 0, vy = 0, speed = GAME_SPEED + (this.element === 'light' ? 1.5 : 0);
                 if (this.evolved && (this.element === 'water' || this.element === 'physical')) speed += 1.5;
                 
                 if (this.type === 'p1') {
@@ -902,14 +902,15 @@
                 
                 if(target.invuln<=0 && !((target.element==='water'||target.element==='light'||target.element==='shadow')&&target.specialActive>0) && b.x>target.x && b.x<target.x+target.size && b.y>target.y && b.y<target.y+target.size) { 
                     (b.owner==='p1'?p1:p2).score += 25; 
-                    target.score = Math.max(0, target.score-10); 
+                    target.score = Math.max(0, target.score - 10); 
                     target.respawn(); updateScore(); bullets.splice(i,1); continue; 
                 }
                 
                 for (let e of enemies) {
                     if(b.x>e.x && b.x<e.x+e.size && b.y>e.y && b.y<e.y+e.size) {
-                        if (b.isPierce) { if (!b.hitEnemies.has(e)) { (b.owner==='p1'?p1:p2).score+=2; b.hitEnemies.add(e); e.respawn(walls); if(b.element==='ice') e.frozen = 180; } }
-                        else { (b.owner==='p1'?p1:p2).score+=2; e.respawn(walls); if(b.element==='ice') e.frozen = 120; bullets.splice(i,1); break; }
+                        let pts = 2;
+                        if (b.isPierce) { if (!b.hitEnemies.has(e)) { (b.owner==='p1'?p1:p2).score+=pts; b.hitEnemies.add(e); e.respawn(walls); if(b.element==='ice') e.frozen = 180; } }
+                        else { (b.owner==='p1'?p1:p2).score+=pts; e.respawn(walls); if(b.element==='ice') e.frozen = 120; bullets.splice(i,1); break; }
                     }
                 }
             }
